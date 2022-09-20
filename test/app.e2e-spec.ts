@@ -163,7 +163,7 @@ describe('App e2e', () => {
       })
     });
     
-    /*
+  
     describe('Create bookmark', () => {
       it('should create Bookmark', () => {
         const dto: CreateBookmarkDto = {
@@ -178,7 +178,7 @@ describe('App e2e', () => {
         .expectStatus(201).inspect();
       })
     });
-    */
+
 
     describe('Get bookmark', () => {});
 
