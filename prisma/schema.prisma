@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") //lo toma del primer archivo que encuentra en el ambiente, si ponemos uno en /prisma, va a tomar ese 
+}
+
+
+model User {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  email String @unique
+  hash String
+
+  firstName String? //con el ? se hace opcional
+  lastName String?
+
+  @@map("users") //mapea User a users
+  bookmarks Bookmark[] //incluimos un arreglo de book marks en el usuario porque puede tener muchos
+}
+model Bookmark {
+  id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title String
+  description String?
+  link String 
+
+  userId Int          //fields=primarykeys references: a que variable hace referencia
+  user User @relation(fields: [userId], references: [id] )//onDelete: Cascade (borra todo en cascada para no tener erroes de que se quedan bookmarks sin usuarios o usuarios sin bookmark
+  //                                                        no se hace si puede que necesitemos conservar algunos datos)
+  @@map("bookmarks") 
+}
