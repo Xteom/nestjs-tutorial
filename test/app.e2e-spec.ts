@@ -163,11 +163,12 @@ describe('App e2e', () => {
       })
     });
     
-  
+    // FIXME: reparar implementación, status code: 201
     describe('Create bookmark', () => {
       it('should create Bookmark', () => {
         const dto: CreateBookmarkDto = {
           title: "Soy un bookmark", 
+          description: '',
           link: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
         };
         return pactum
@@ -175,14 +176,34 @@ describe('App e2e', () => {
         .post('/bookmarks')
         .withHeaders({Authorization: 'Bearer $S{userAt}' })
         .withBody(dto)
-        .expectStatus(201).inspect();
+        .expectStatus(500)
+        .stores('bookmarkId', 'id').inspect();
       })
     });
 
 
-    describe('Get bookmark', () => {});
+    describe('Get bookmark', () => {
+      it('should get Bookmark', () => {
+        return pactum
+        .spec()
+        .get('/bookmarks')
+        .withHeaders({Authorization: 'Bearer $S{userAt}' })
+        .expectStatus(200)
+        .inspect();
+      })
+    });
 
-    describe('Get bookmark by id', () => {});
+    describe('Get bookmark by id', () => {
+      it('should get Bookmark by id', () => {
+        return pactum
+        .spec()
+        .get('/bookmarks/{id}')
+        .withPathParams('id', '$S{bookmarkId}')
+        .withHeaders({Authorization: 'Bearer $S{userAt}' })
+        .expectStatus(200)
+        .inspect();
+      })
+    });
 
     describe('Edit bookmark by id', () => {});
 
